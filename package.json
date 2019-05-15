@@ -1,0 +1,19 @@
+{
+  "name": "devconnectapp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tblais1224/TBs-DevConnect.git"
+  },
+  "author": "tblais1224",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tblais1224/TBs-DevConnect/issues"
+  },
+  "homepage": "https://github.com/tblais1224/TBs-DevConnect#readme"
+}
