@@ -3,6 +3,9 @@ const router = express.Router();
 const mongoose = require("mongoose")
 const passport = require("passport")
 
+//lod validations
+const validateProfileInput = require("../../validation/profile")
+
 //load the Profile schema
 const Profile = require("../../models/Profile")
 // Load the User schema
@@ -13,7 +16,7 @@ const User = require("../../models/User")
 // @access   Public
 router.get("/test", (req, res) =>
   res.json({
-    messaage: "Profile route is functional"
+    message: "Profile route is functional"
   })
 );
 
@@ -41,6 +44,14 @@ router.get("/", passport.authenticate("jwt", {
 router.post("/", passport.authenticate("jwt", {
   session: false
 }), (req, res) => {
+  const {errors, isValid} = validateProfileInput(req.body)
+
+  //check validation
+  if(!isValid){
+    //return any errors with a 400 status
+    return res.status(400).json(errors)
+  }
+
   //Get Fields
   const profileFields = {}
   profileFields.user = req.user.id
