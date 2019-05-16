@@ -14,7 +14,6 @@ app.use(bodyParser.urlencoded({extended: false}))
 //had to move bodyParser.json to users route page
 // app.use(bodyParser.json)
 
-
 // database config
 const db = require("./config/keys").mongoURI;
 
