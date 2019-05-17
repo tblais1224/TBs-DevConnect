@@ -2,6 +2,10 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose")
 const passport = require("passport")
+const bodyParser = require("body-parser");
+const jsonParser = bodyParser.json();
+
+mongoose.set('useFindAndModify', false);
 
 //lod validations
 const validateProfileInput = require("../../validation/profile")
@@ -31,17 +35,19 @@ router.get("/", passport.authenticate("jwt", {
   Profile.findOne({
       user: req.user.id
     })
+    .populate("user", ["name", "avatar"])
     .then(profile => {
       if (!profile) {
         errors.noprofile = "There is no profile for this user!"
         return res.status(404).json(errors)
       }
+      res.json(profile)
     }).catch(err => res.status(404).json(err))
 })
 // @route   Post /api/profile/
 // @desc   create or edit user profile
 // @access   Private
-router.post("/", passport.authenticate("jwt", {
+router.post("/", jsonParser, passport.authenticate("jwt", {
   session: false
 }), (req, res) => {
   const {errors, isValid} = validateProfileInput(req.body)
