@@ -44,6 +44,66 @@ router.get("/", passport.authenticate("jwt", {
       res.json(profile)
     }).catch(err => res.status(404).json(err))
 })
+
+// @route   GET api/profile/all
+// @desc   get all profiles
+// @access   public
+router.get("/all", (req, res) => {
+  //intitialize erros object
+  const errors = {}
+  //matches to handle in database
+  Profile.find()
+  .populate("user", ["name", "avatar"])
+  .then(profiles => {
+    if(!profiles){
+      errors.noprofile = "No profiles could be found!"
+      return res.status(404).json(errors)
+    }
+    res.json(profiles)
+  })
+  .catch(err => res.status(404).json({profiles: "No profiles exist."}))
+})
+
+// @route   GET api/profile/handle/:handle
+// @desc   get profile by handle. this is a backend api route 
+// @access   public
+router.get("/handle/:handle", (req, res) => {
+  //intitialize erros object
+  const errors = {}
+  //matches to handle in database
+  Profile.findOne({handle: req.params.handle})
+  .populate("user", ["name", "avatar"])
+  .then(profile => {
+    if(!profile){
+      errors.noprofile = "There is not profile for this user."
+      res.status(404).json(errors)
+    }
+    res.json(profile)
+  })
+  .catch(err => res.status(404).json(err))
+})
+//test with Tom te Blais
+
+// @route   GET api/profile/user/:user_id
+// @desc   get profile by user_id. this is a backend api route 
+// @access   public
+router.get("/user/:user_id", (req, res) => {
+  //intitialize erros object
+  const errors = {}
+  //matches to handle in database
+  Profile.findOne({user: req.params.user_id})
+  .populate("user", ["name", "avatar"])
+  .then(profile => {
+    if(!profile){
+      errors.noprofile = "There is not profile for this user."
+      res.status(404).json(errors)
+    }
+    res.json(profile)
+  })
+  .catch((err) => res.status(404).json({profile: "No profile exists for this user."}))
+})
+
+
 // @route   Post /api/profile/
 // @desc   create or edit user profile
 // @access   Private
