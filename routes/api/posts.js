@@ -168,16 +168,62 @@ router.post(
   jsonParser,
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    Profile.findOne({ user: req.user.id }).then(profile => {
-      Post.findById(req.params.id)
-        .then(post => {
-          // add a user id and comment to the comment array
-          post.comments.unshift({ user: req.user.id });
-          //save post and return new updated post with added like
-          post.save().then(post => res.json(post));
-        })
-        .catch(err => res.status(404).json({ error: "No post found!" }));
-    });
+    //can use the same validations as post for comments (check char limits)
+    const { errors, isValid } = validatePostInput(req.body);
+    //check validation
+    if (!isValid) {
+      return res.status(400).json(errors);
+    }
+
+    Post.findById(req.params.id)
+      .then(post => {
+        //sets comment from post data in body, and id from user id
+        const newComment = {
+          text: req.body.text,
+          name: req.body.name,
+          avatar: req.body.avatar,
+          user: req.user.id
+        };
+
+        // add to comments array on post
+        post.comments.unshift(newComment);
+
+        //save post with added comment the return post
+        post.save().then(post => res.json(post));
+      })
+      .catch(err => res.status(404).json({ error: "No post found!" }));
+  }
+);
+
+// @route  delete /api/posts/comment/:id
+// @desc   delete a comment from a post by id
+// @access   private
+router.delete(
+  "/comment/:id/:comment_id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Post.findById(req.params.id)
+      .then(post => {
+        //check if comment does not exist in post.comments array
+        if (
+          post.comments.filter(
+            comment => comment._id.toString() === req.params.comment_id).length === 0
+          
+        ) {
+          return res
+            .status(404)
+            .json({ commentdoesntexist: "No comment found!" });
+        }
+
+        //get the index of the comment to remove by params comment_id
+        const removeIndex = post.comments
+          .map(item => item._id.toString())
+          .indexOf(req.params.comment_id);
+        // remove comment from comments array then save and return updated post
+        post.comments.splice(removeIndex, 1);
+        post.save().then(post => res.json(post));
+      })
+      .catch(err => res.status(404).json({ error: "No post found!" }));
   }
 );
 
