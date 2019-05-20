@@ -23,7 +23,7 @@ router.get("/test", (req, res) =>
   res.json({ messaage: "Users route is functional" })
 );
 
-// @route   post /api/users/register
+// @route   POST /api/users/register
 // @desc   Register user
 // @access   Public
 router.post("/register", jsonParser, (req, res) => {
@@ -36,7 +36,7 @@ router.post("/register", jsonParser, (req, res) => {
 
   User.findOne({ email: req.body.email }).then(user => {
     if (user) {
-      error.email = "Email already exists!";
+      errors.email = "Email already exists!";
       return res.status(400).json(errors);
     } else {
       const avatar = gravatar.url(req.body.email, {
