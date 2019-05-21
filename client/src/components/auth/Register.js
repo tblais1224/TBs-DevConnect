@@ -1,6 +1,9 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types"
 import axios from "axios";
 import classnames from "classnames";
+import { connect } from "react-redux";
+import { registerUser } from "../../actions/authActions";
 
 class Register extends Component {
   //the constructor is accessible in the react front end
@@ -33,19 +36,26 @@ class Register extends Component {
       password2: this.state.password2
     };
 
+
+    this.props.registerUser(newUser)
     //sends post to the proxy plus route below
-    axios
-      .post("/api/users/register", newUser)
-      .then(res => console.log(res.data))
-      //console logs the data from the error response
-      .catch(err => this.setState({ errors: err.response.data }));
+    // axios
+    //   .post("/api/users/register", newUser)
+    //   .then(res => console.log(res.data))
+    //   //console logs the data from the error response
+    //   .catch(err => this.setState({ errors: err.response.data }));
   };
 
   render() {
     // putting errors in brackets allows us to grab specific errors from it, (object)
     const { errors } = this.state;
+
+const {user} = this.props.auth
+
     return (
       <div className="register">
+        {/* if user exists display user.name else null (this is to test user)*/}
+        {user ? user.name : null}
         <div className="container">
           <div className="row">
             <div className="col-md-8 m-auto">
@@ -130,4 +140,14 @@ class Register extends Component {
   }
 }
 
-export default Register;
+Register.propTypes = {
+  registerUser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired
+}
+
+const mapStateToProps = (state) => ({
+  //auth comes from index.js in reducers
+  auth: state.auth
+})
+
+export default connect(mapStateToProps, {registerUser})(Register);
