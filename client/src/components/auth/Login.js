@@ -1,10 +1,8 @@
 import React, { Component } from "react";
-import axios from "axios"
-import classnames from "classnames"
-
+import axios from "axios";
+import classnames from "classnames";
 
 class Login extends Component {
-
   constructor() {
     super();
     this.state = {
@@ -14,28 +12,31 @@ class Login extends Component {
     };
   }
 
-  onChange = (e) => {
+  onChange = e => {
     //this setState for the name of the target (email, password), then sets it to the value of the event target
-    this.setState({[e.target.name]: e.target.value})
-  }
+    this.setState({ [e.target.name]: e.target.value });
+  };
 
-  onSubmit = (e) => {
+  onSubmit = e => {
     //prevent auto reload on form submit
-    e.preventDefault()
+    e.preventDefault();
 
     //this is the same as whats in login route backend api
     const user = {
       email: this.state.email,
-      password: this.state.password,
-    }
+      password: this.state.password
+    };
     //sends post to the proxy plus route below
-    axios.post("/api/users/login", user)
-    .then(res => console.log(res.data))
-    //console logs the data from the error response
-    .catch(err => this.setState({errors: err.response.data}))
+    axios
+      .post("/api/users/login", user)
+      .then(res => console.log(res.data))
+      //console logs the data from the error response
+      .catch(err => this.setState({ errors: err.response.data }));
   };
 
   render() {
+    // putting errors in brackets allows us to grab specific errors from it, (object)
+    const { errors } = this.state;
     return (
       <div className="login">
         <div className="container">
@@ -49,22 +50,32 @@ class Login extends Component {
                 <div className="form-group">
                   <input
                     type="email"
-                    className="form-control form-control-lg"
+                    className={classnames("form-control form-control-lg", {
+                      "is-invalid": errors.email
+                    })}
                     placeholder="Email Address"
                     name="email"
                     value={this.state.email}
                     onChange={this.onChange}
                   />
+                  {errors.email && (
+                    <div className="invalid-feedback">{errors.email}</div>
+                  )}
                 </div>
                 <div className="form-group">
                   <input
                     type="password"
-                    className="form-control form-control-lg"
+                    className={classnames("form-control form-control-lg", {
+                      "is-invalid": errors.password
+                    })}
                     placeholder="Password"
                     name="password"
                     value={this.state.password}
                     onChange={this.onChange}
                   />
+                  {errors.password && (
+                    <div className="invalid-feedback">{errors.password}</div>
+                  )}
                 </div>
                 <input type="submit" className="btn btn-info btn-block mt-4" />
               </form>
