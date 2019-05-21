@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types"
-import axios from "axios";
 import classnames from "classnames";
 import { connect } from "react-redux";
 import { registerUser } from "../../actions/authActions";
@@ -38,12 +37,7 @@ class Register extends Component {
 
 
     this.props.registerUser(newUser)
-    //sends post to the proxy plus route below
-    // axios
-    //   .post("/api/users/register", newUser)
-    //   .then(res => console.log(res.data))
-    //   //console logs the data from the error response
-    //   .catch(err => this.setState({ errors: err.response.data }));
+
   };
 
   render() {
@@ -147,7 +141,9 @@ Register.propTypes = {
 
 const mapStateToProps = (state) => ({
   //auth comes from index.js in reducers
-  auth: state.auth
+  auth: state.auth,
+  //this comes from the server backend through axios catch in errorReducer
+  errors: state.errors
 })
 
 export default connect(mapStateToProps, {registerUser})(Register);
