@@ -1,6 +1,9 @@
 import React, { Component } from "react";
-import axios from "axios";
+// import axios from "axios";
 import classnames from "classnames";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { loginUser } from "../../actions/authActions";
 
 class Login extends Component {
   constructor() {
@@ -10,6 +13,21 @@ class Login extends Component {
       password: "",
       errors: {}
     };
+  }
+
+  componentDidMount() {
+    if (this.props.auth.isAuthenticated) {
+      this.props.history.push("/dashboard");
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.auth.isAuthenticated) {
+      this.props.history.push("/dashboard");
+    }
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors });
+    }
   }
 
   onChange = e => {
@@ -22,16 +40,18 @@ class Login extends Component {
     e.preventDefault();
 
     //this is the same as whats in login route backend api
-    const user = {
+    const userData = {
       email: this.state.email,
       password: this.state.password
     };
-    //sends post to the proxy plus route below
-    axios
-      .post("/api/users/login", user)
-      .then(res => console.log(res.data))
-      //console logs the data from the error response
-      .catch(err => this.setState({ errors: err.response.data }));
+
+    this.props.loginUser(userData);
+    // //sends post to the proxy plus route below
+    // axios
+    //   .post("/api/users/login", user)
+    //   .then(res => console.log(res.data))
+    //   //console logs the data from the error response
+    //   .catch(err => this.setState({ errors: err.response.data }));
   };
 
   render() {
@@ -43,9 +63,7 @@ class Login extends Component {
           <div className="row">
             <div className="col-md-8 m-auto">
               <h1 className="display-4 text-center">Log In</h1>
-              <p className="lead text-center">
-                Sign in to your DevConnector account
-              </p>
+              <p className="lead text-center">Sign in to your account</p>
               <form onSubmit={this.onSubmit}>
                 <div className="form-group">
                   <input
@@ -87,4 +105,18 @@ class Login extends Component {
   }
 }
 
-export default Login;
+Login.propTypes = {
+  loginUser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+  auth: state.auth,
+  errors: state.errors
+});
+
+export default connect(
+  mapStateToProps,
+  { loginUser }
+)(Login);
