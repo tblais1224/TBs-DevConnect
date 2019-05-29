@@ -62,11 +62,38 @@ export const addExperience = (expData, history) => dispatch => {
 };
 
 //add education
-export const addEducation = (expData, history) => dispatch => {
+export const addEducation = (eduData, history) => dispatch => {
   axios
-    .post("/api/profile/education", expData)
+    .post("/api/profile/education", eduData)
     //redircts to the dashboard page
     .then(res => history.push("/dashboard"))
+    .catch(err => dispatch({ type: GET_ERRORS, payload: err.response.data }));
+};
+
+//delete Experience
+export const deleteExperience = id => dispatch => {
+  axios
+    .delete(`/api/profile/experience/${id}`)
+    //redircts to the dashboard page
+    .then(res =>
+      dispatch({
+        type: GET_PROFILE,
+        payload: res.data
+      })
+    )
+    .catch(err => dispatch({ type: GET_ERRORS, payload: err.response.data }));
+};
+//delete Education
+export const deleteEducation = id => dispatch => {
+  axios
+    .delete(`/api/profile/education/${id}`)
+    //redircts to the dashboard page
+    .then(res =>
+      dispatch({
+        type: GET_PROFILE,
+        payload: res.data
+      })
+    )
     .catch(err => dispatch({ type: GET_ERRORS, payload: err.response.data }));
 };
 

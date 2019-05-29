@@ -45,7 +45,7 @@ class AddEducation extends Component {
   onSubmit(e) {
     e.preventDefault();
     //education data
-    const expData = {
+    const eduData = {
       school: this.state.school,
       fieldofstudy: this.state.fieldofstudy,
       degree: this.state.degree,
@@ -55,7 +55,7 @@ class AddEducation extends Component {
       description: this.state.description
     };
     //withRouter allows redirect with the 2nd parameter
-    this.props.addEducation(expData, this.props.history);
+    this.props.addEducation(eduData, this.props.history);
   }
 
   render() {
@@ -125,7 +125,7 @@ class AddEducation extends Component {
                     id="current"
                   />
                   <label htmlFor="current" className="form-check-label">
-                    Current Job
+                    Currently Attending
                   </label>
                 </div>
                 <TextAreaFieldGroup
