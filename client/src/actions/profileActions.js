@@ -52,6 +52,24 @@ export const clearCurrentProfile = () => {
   };
 };
 
+//add experience
+export const addExperience = (expData, history) => dispatch => {
+  axios
+    .post("/api/profile/experience", expData)
+    //redircts to the dashboard page
+    .then(res => history.push("/dashboard"))
+    .catch(err => dispatch({ type: GET_ERRORS, payload: err.response.data }));
+};
+
+//add education
+export const addEducation = (expData, history) => dispatch => {
+  axios
+    .post("/api/profile/education", expData)
+    //redircts to the dashboard page
+    .then(res => history.push("/dashboard"))
+    .catch(err => dispatch({ type: GET_ERRORS, payload: err.response.data }));
+};
+
 //delete entire account and profile
 //use dispatch when making axios requestr
 export const deleteAccount = () => dispatch => {
