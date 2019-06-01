@@ -36,9 +36,11 @@ class Profile extends Component {
           </div>
           {/* profile sends the profile to the component file */}
           <ProfileHeader profile={profile}/>
-          <ProfileAbout />
-          <ProfileCreds />
-          <ProfileGithub />
+          <ProfileAbout profile={profile}/>
+          <ProfileCreds education={profile.education} experience={profile.experience}/>
+          {/* check for githubusername before rendering */}
+          {profile.githubusername ? (<ProfileGithub username={profile.githubusername}/>) : null}
+          
         </div>
       );
     }
