@@ -148,7 +148,7 @@ export const getProfileByHandle = handle => dispatch => {
     .get(`/api/profile/handle/${handle}`)
     .then(res =>
       dispatch({
-        type: GET_PROFILES,
+        type: GET_PROFILE,
         payload: res.data
       })
     )
