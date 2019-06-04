@@ -19,6 +19,7 @@ class Profile extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.profile.profile === null && this.props.profile.loading) {
+      console.log("hello");
       //if not profile and loading redirect the user to not-found route
       this.props.history.push("/not-found");
     }

@@ -83,7 +83,8 @@ router.get("/handle/:handle", (req, res) => {
     .then(profile => {
       if (!profile) {
         errors.noprofile = "There is not profile for this user.";
-        res.status(404).json(errors);
+        //remove line below to avoid error when redirecting to profile not found page
+        // res.status(404).json(errors);
       }
       res.json(profile);
     })
@@ -104,6 +105,7 @@ router.get("/user/:user_id", (req, res) => {
       if (!profile) {
         errors.noprofile = "There is not profile for this user.";
         res.status(404).json(errors);
+        
       }
       res.json(profile);
     })
