@@ -1,4 +1,4 @@
-import { ADD_POST, GET_POSTS, POST_LOADING } from "../actions/types";
+import { ADD_POST, GET_POSTS, DELETE_POST, POST_LOADING } from "../actions/types";
 
 const intitialState = {
   posts: [],
@@ -24,6 +24,12 @@ export default function(state = intitialState, action) {
         ...state,
         posts: [action.payload, ...state.posts]
       };
+      case DELETE_POST:
+        return {
+          ...state,
+          //quickly filters out the deleted post locally so it doesnt have to wait for axios
+          posts: state.posts.filter(post => post._id !== action.payload)
+        }
     default:
       return state;
   }
