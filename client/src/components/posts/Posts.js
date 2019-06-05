@@ -37,8 +37,8 @@ class Posts extends Component {
 }
 
 Posts.propTypes = {
+  getPosts: PropTypes.func.isRequired,
   post: PropTypes.object.isRequired,
-  getPosts: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
