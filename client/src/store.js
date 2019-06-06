@@ -14,7 +14,7 @@ const store = createStore(
   compose(
     applyMiddleware(...middleware),
     //line 16 and compose is required to enable the chrome redux dev tool, shown in intructions on the extension itself
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+    // window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
   )
 );
 
